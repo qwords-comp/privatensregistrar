@@ -109,16 +109,10 @@ function aksaradata_GetNameservers($params) {
         "scope" => "",
     ];
 
-    $datas = [
-        "domain" => $params['sld'].".".$params['tld'],
-        "domain_name" => $params['sld'],
-        "domain_extension" => $params['tld'],
-    ];
-
     try {
         $main = new Aksara;
         $auth = $main->authentication($oauth2);
-        $request = $main->request($main->url."/api/rest/v3/domain/info","POST",$auth->access_token,$datas);
+        $request = $main->request($main->url."/api/rest/v3/domain/info","POST",$auth->access_token, "");
     
         if($request->code == 200){
             $ns = explode(',',$request->data->nameserver);
