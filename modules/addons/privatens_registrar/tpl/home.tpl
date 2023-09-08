@@ -1,10 +1,3 @@
-{php}
-    $str=rand(); 
-    $result = sha1($str);
-    $csrftoken = $result;
-    $_SESSION['csrftoken'] = $csrftoken;
-    $id = $_SESSION['uid'];
-{/php}
 <style>
     img{
         display: block;
@@ -72,7 +65,9 @@
 			</div>
 	</div>
 </div>
+
 {$domains}
+
 
 <form method="post" action ="./index.php?m=privatens_registrar&page=set_doc">
 <!-- Modal -->
@@ -192,8 +187,8 @@ $(function(){
 
 $('#select_domain').change(function(){
     var domain = $(this).val();
-    var token = '{php} echo $csrftoken; {/php}'
-    var id = '{php} echo $id; {/php}'
+    var token = '{$csrftoken}';
+    var id = '{$id}';
     var url = './modules/addons/privatens_registrar/req.php?do=lookup_tld&domain='+domain+'&token='+token+'&id='+id;
     $.get(url,function(data){
        var obj = JSON.parse(data);

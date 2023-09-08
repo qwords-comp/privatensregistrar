@@ -476,7 +476,13 @@ SQL;
         
     }
     private function _requirement_page($vars){
-         return array(
+        $str=rand(); 
+        $result = sha1($str);
+        $csrftoken = $result;
+        $_SESSION['csrftoken'] = $csrftoken;
+        $id = $_SESSION['uid'];
+    
+        return array(
             'pagetitle'    => 'Domain document',
             'breadcrumb'   => array('index.php?m=privatens_registrar&page=requirement'=>'Domain Document'),
             'templatefile' => 'tpl/domain_document',
@@ -487,7 +493,9 @@ SQL;
                 'domains'  =>$this->_myDomain($_SESSION['uid']),
                 'document' =>$this->_list_file($_SESSION['uid']),
                 'dir'      =>$this->dir_read,
-                'table'    =>$this->_document_data($this->_myDomain($_SESSION['uid']))
+                'table'    =>$this->_document_data($this->_myDomain($_SESSION['uid'])),
+                'csrftoken' =>$csrftoken,
+                'id' =>$id,
             ),
         );
     }
@@ -544,6 +552,17 @@ SQL;
     }
     private function _client_home($vars,$msg=''){
 
+        $mydomain = $this->_myDomain($_SESSION['uid']) ?? [];
+        $domains = [];
+        foreach ($mydomain as $value) {
+            $domains[] = $value;
+        }
+        
+        $str=rand(); 
+        $result = sha1($str);
+        $csrftoken = $result;
+        $_SESSION['csrftoken'] = $csrftoken;
+        $id = $_SESSION['uid'];
         
          return array(
             'pagetitle'    => 'Domain document',
@@ -554,9 +573,11 @@ SQL;
             'vars' => array(
                 'msg' =>$msg,
                 'uid'      =>$_SESSION['uid'],
-                'domains'  =>$this->_myDomain($_SESSION['uid']),
+                'domains'  =>implode(', ', $domains),
                 'document' =>$this->_list_file($_SESSION['uid']),
                 'dir'      =>$this->dir_read,
+                'csrftoken'=>$csrftoken,
+                'id'      =>$id,
             ),
         );
     }
